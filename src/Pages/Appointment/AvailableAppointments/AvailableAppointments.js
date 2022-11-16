@@ -1,3 +1,4 @@
+import { async } from "@firebase/util";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import React, { useState } from "react";
@@ -22,10 +23,11 @@ const AvailableAppointments = ({ selectedDate }) => {
 
   const { data: appointmentOptions = [] } = useQuery({
     queryKey: ["appointmentOptions"],
-    queryFn: () =>
-      fetch("http://localhost:5000/appointmentOptions").then((res) =>
-        res.json()
-      ),
+    queryFn: async () => {
+      const res = await fetch("http://localhost:5000/appointmentOptions");
+      const data = await res.json();
+      return data;
+    },
   });
 
   return (
